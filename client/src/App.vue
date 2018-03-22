@@ -1,13 +1,26 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <router-view :kumpulanSoal="kumpulanSoal"/>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  data () {
+    return {
+      kumpulanSoal: [{
+        id: 1,
+        kata: 'satu'
+      }, {
+        id: 2,
+        kata: 'dua'
+      }, {
+        id: 3,
+        kata: 'tiga'
+      }]
+    }
+  }
 }
 </script>
 
@@ -18,6 +31,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
