@@ -9,7 +9,11 @@
       <h1 class="card-title">Typo-Racer</h1>
       <p class="card-text">Masukkan nama room, lalu ketik mulai</p>
       <input type="text" class="form"><br><br>
-      <router-link :to="{path: '/start/'+id}" href="#" class="btn btn-dark">Mulai</router-link>
+      <router-link :to="{path: '/start/'+id}">
+        <button @click="startGame" class="btn btn-dark" type="button" name="button">
+          Mulai
+        </button>
+      </router-link>
     </div>
     <div class="card-footer text-muted">
       <marquee direction="right">
@@ -18,6 +22,18 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    startGame: function () {
+      this.$store.dispatch('getQuestion')
+      console.log('ini data di home')
+      console.log(this.$store.state.array)
+    }
+  }
+}
+</script>
 
 <style>
 .card {
