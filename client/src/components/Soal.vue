@@ -33,7 +33,8 @@ export default {
       count: 0,
       ketikan: '',
       isWinner: null,
-      winner: ''
+      winner: '',
+      players: []
     }
   },
   methods: {
@@ -89,6 +90,24 @@ export default {
   created: function () {
     // console.log('ini '+typeRacer.child(`Room/${this.$store.state.roomName}/winner`).val())
     this.$store.dispatch('getScore')
+    let playerList = []
+    typeRacer.child(`Room/${this.$store.state.roomName}/player`).once('value', snapshot => {
+      snapshot.forEach(el => {
+        playerList.push(el.key)
+      })
+      console.log(playerList)
+      playerList.forEach(player => {
+        typeRacer.child(`Room/${this.$store.state.roomName}/player/${player}`).on('child_changed', snapshotScore => {
+          let obj = {
+            name: player,
+            score: snapshotScore.val()
+          }
+          this.players.push(obj)
+          console.log(this.players)
+        })
+      })
+    })
+
     typeRacer.child(`Room/${this.$store.state.roomName}/winner`).on('value', (snapshot) => {
       console.log(`ini snapshot ${snapshot.val()}`)
       console.log(snapshot.val())
