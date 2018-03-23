@@ -11,6 +11,7 @@
     <div class = 'jumbotron' v-show="isWinner == 'lost'">
       <h1>KAMU CUPU!</h1>
       <h3>Pemenangnya: {{winner}}</h3>
+      <!-- <button @click="destroyRoom">drop room</button> -->
     </div>
     <div class="container" v-show="!isWinner">
       <div class="form-group">
@@ -18,6 +19,11 @@
         <input class="form-control" id="inputketik" type = 'text' v-model='ketikan' v-on:keyup='keymonitor' v-focus placeholder="Ketik di Sini">
       </div>
       <button @click=answer ref= 'myBtn' class="btn btn-dark">Kumpulkan</button>
+      <!-- <br><br>
+      <h3>Score List:</h3>
+      <ul>
+        <li v-for="(player,i) in players" :key="i"><h5>{{player.name}}: {{player.score}}</h5></li>
+      </ul> -->
     </div>
     <div id="kalah" class = 'jumbotron' v-show="isWinner == 'lost'">
     </div>
@@ -42,7 +48,8 @@ export default {
   },
   methods: {
     destroyRoom () {
-      this.$store.dispatch('removeRoom')
+      // this.router.push('/')
+      // this.$store.dispatch('removeRoom')
     },
     answer ($event) {
       if (this.ketikan === this.jawaban(this.count)) {
@@ -50,6 +57,7 @@ export default {
         this.$store.dispatch('updateScore')
         this.ketikan = ''
       } else {
+        alert('Jawaban Salah!')
         this.ketikan = ''
       }
     },
@@ -91,13 +99,13 @@ export default {
     }
   },
   created: function () {
-    // console.log('ini '+typeRacer.child(`Room/${this.$store.state.roomName}/winner`).val())
     this.$store.dispatch('getScore')
     let playerList = []
     typeRacer.child(`Room/${this.$store.state.roomName}/player`).once('value', snapshot => {
       snapshot.forEach(el => {
         playerList.push(el.key)
       })
+      console.log('ini player')
       console.log(playerList)
       playerList.forEach(player => {
         typeRacer.child(`Room/${this.$store.state.roomName}/player/${player}`).on('child_changed', snapshotScore => {
