@@ -4,20 +4,23 @@
       <h2>{{count+1}}</h2>
       <hr class="my-4">
       <h3 class="display-4">{{jawaban(count)}}</h3>
-      <input id="inputketik" type = 'text' v-model='ketikan' v-on:keyup='keymonitor' v-focus>
-      <button @click=answer ref= 'myBtn'>jawab</button>
-      <button @click="destroyRoom">drop room</button>
-      {{score}}
     </div>
-    <div class = 'jumbotron' v-show="isWinner == 'win'">
+    <div id="menang" class = 'jumbotron' v-show="isWinner == 'win'">
       <h1>KAMU MENANG!</h1>
     </div>
     <div class = 'jumbotron' v-show="isWinner == 'lost'">
       <h1>KAMU CUPU!</h1>
       <h3>Pemenangnya: {{winner}}</h3>
     </div>
-
-    <Form></Form>
+    <div class="container" v-show="!isWinner">
+      <div class="form-group">
+        <label for="Jawaban"><strong>Jawaban</strong></label>
+        <input class="form-control" id="inputketik" type = 'text' v-model='ketikan' v-on:keyup='keymonitor' v-focus placeholder="Ketik di Sini">
+      </div>
+      <button @click=answer ref= 'myBtn' class="btn btn-dark">Kumpulkan</button>
+    </div>
+    <div id="kalah" class = 'jumbotron' v-show="isWinner == 'lost'">
+    </div>
   </div>
 </template>
 
@@ -104,3 +107,17 @@ export default {
   }
 }
 </script>
+
+<style>
+#menang {
+  color: white;
+  text-shadow: 2px 2px 4px black;
+  background: url(https://thumbs.gfycat.com/CloseAncientDorado-size_restricted.gif)
+}
+#kalah {
+  color: white;
+  text-shadow: 2px 2px 4px black;
+  background: url(https://im-01.gifer.com/FQ5Q.gif);
+  height: 50rem
+}
+</style>

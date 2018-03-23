@@ -8,7 +8,7 @@
     <div class="card-body">
       <h1 class="card-title">Typo-Racer</h1>
       <p class="card-text">Masukkan nama room, lalu ketik mulai</p>
-      <input id="room-name" type="text" class="form"><br><br>
+      <input id="room-name" type="text" class="form" v-on:keyup='keymonitor'><br><br>
         <button @click="startGame" class="btn btn-dark" type="button" name="button">
           Mulai
         </button>
@@ -41,6 +41,11 @@ export default {
       this.$store.dispatch('joinRoom', roomName)
       this.$store.dispatch('getLocalQuestion', roomName)
       this.$router.push({name: 'Game Room', params: {id: roomName}})
+    },
+    keymonitor: function (event) {
+      if (event.key === 'Enter') {
+        this.startGame()
+      }
     }
   },
   created () {
