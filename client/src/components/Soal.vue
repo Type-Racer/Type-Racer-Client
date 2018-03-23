@@ -8,10 +8,11 @@
       <button @click=answer ref= 'myBtn'>jawab</button>
     </div>
     <div class = 'jumbotron' v-show="isWinner == 'win'">
-      <h1>KAMU MENANG</h1>
+      <h1>KAMU MENANG!</h1>
     </div>
     <div class = 'jumbotron' v-show="isWinner == 'lost'">
-      <h1>KAMU CUPU</h1>
+      <h1>KAMU CUPU!</h1>
+      <h3>Pemenangnya: {{winner}}</h3>
     </div>
 
     <Form></Form>
@@ -29,7 +30,8 @@ export default {
     return {
       count: 0,
       ketikan: '',
-      isWinner: null
+      isWinner: null,
+      winner: ''
     }
   },
   methods: {
@@ -85,6 +87,7 @@ export default {
       } else if (snapshot.val() === '') {
         this.isWinner = null
       } else {
+        this.winner = snapshot.val()
         this.isWinner = 'lost'
       }
     })
