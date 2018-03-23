@@ -125,7 +125,7 @@ export default new Vuex.Store({
       // typeRacer.child(`Room/${name}/player/${this.$store.state.playerName}/score`).set(score)
     },
     setWinner: function (context) {
-      typeRacer.child(`Room/${this.$store.state.roomName}/winner`).set(true)
+      typeRacer.child(`Room/${context.state.roomName}/winner`).set(context.state.playerName)
     }
   }
 })
