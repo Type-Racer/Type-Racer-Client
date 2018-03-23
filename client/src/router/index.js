@@ -14,10 +14,12 @@ export default new Router({
     },
     {
       path: '/room',
+      name: 'Room Menu',
       component: Login
     },
     {
       path: '/start/:id',
+      name: 'Game Room',
       component: Soal
     }
   ]

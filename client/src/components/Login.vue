@@ -9,11 +9,9 @@
       <h1 class="card-title">Typo-Racer</h1>
       <p class="card-text">Masukkan nama room, lalu ketik mulai</p>
       <input id="room-name" type="text" class="form"><br><br>
-      <router-link :to="{path: '/start/'+id}">
         <button @click="startGame" class="btn btn-dark" type="button" name="button">
           Mulai
         </button>
-      </router-link>
       <hr>
       <ul v-for="(room, i) in rooms" :key="i">
         <li>{{room}} <button class="btn btn-success" @click="joinGame(room)">Join</button></li>
@@ -32,14 +30,17 @@ export default {
   methods: {
     startGame: function () {
       this.$store.commit('')
-      this.$store.dispatch('getQuestion')
       this.$store.dispatch('createRoom', document.querySelector('#room-name').value)
+      this.$store.dispatch('getQuestion')
       console.log('ini data di home')
       console.log(this.$store.state.array)
+      this.$router.push({name: 'Game Room', params: {id: this.$store.state.roomName}})
     },
     joinGame: function (roomName) {
       // console.log(roomName)
       this.$store.dispatch('joinRoom', roomName)
+      this.$store.dispatch('getLocalQuestion', roomName)
+      this.$router.push({name: 'Game Room', params: {id: roomName}})
     }
   },
   created () {
