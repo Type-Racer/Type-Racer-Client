@@ -88,6 +88,9 @@ export default new Vuex.Store({
         commit('getRoom', childs)
       })
     },
+    removeRoom: function ({ state, commit }) {
+      typeRacer.child('Room/' + state.roomName).remove(() => console.log('succes remove node'))
+    },
     getScore: function ({ state, commit }) {
       typeRacer.child('Room/' + state.roomName + '/player/' + state.playerName).on('value', snapshot => {
         console.log(snapshot.val())
