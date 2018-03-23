@@ -6,6 +6,8 @@
 
 <script>
 export default {
+  // import typeRacer from './firebase.js'
+
   name: 'App',
   data () {
     return {
