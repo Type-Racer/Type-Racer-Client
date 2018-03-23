@@ -40,9 +40,13 @@ export default {
     }
   },
   methods: {
+    destroyRoom () {
+      this.$store.dispatch('removeRoom')
+    },
     answer ($event) {
       if (this.ketikan === this.jawaban(this.count)) {
         this.count++
+        this.$store.dispatch('updateScore')
         this.ketikan = ''
       } else {
         this.ketikan = ''
@@ -72,7 +76,10 @@ export default {
     ...mapGetters([
       'jawaban',
       'winner'
-    ])
+    ]),
+    score () {
+      return this.$store.state.score
+    }
   },
   directives: {
     focus: {
@@ -84,6 +91,7 @@ export default {
   },
   created: function () {
     // console.log('ini '+typeRacer.child(`Room/${this.$store.state.roomName}/winner`).val())
+    this.$store.dispatch('getScore')
     typeRacer.child(`Room/${this.$store.state.roomName}/winner`).on('value', (snapshot) => {
       console.log(`ini snapshot ${snapshot.val()}`)
       console.log(snapshot.val())
