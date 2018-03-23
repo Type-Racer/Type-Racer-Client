@@ -5,18 +5,17 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    groups: [
-      {
-        name: '1'
-      },
-      {
-        name: '2'
-      }
-    ]
+    winner: 'MENANG',
+    array: ['sate', 'burger', 'spaghetti', 'ayam bakar', 'tahu gejrot', 'empal gentong', 'makaroni ngehe', 'soto paru', 'bika ambon', 'nasi padang', 'gehu panas renyah lagi pedas']
   },
   getters: {
-    groups: function () {
-      return this.state.groups
+    jawaban: (state) => (id) => {
+      return state.array[id]
+    },
+    winner: (state) => {
+      return state.winner
     }
+  },
+  actions: {
   }
 })
