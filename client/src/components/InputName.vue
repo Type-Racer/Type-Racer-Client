@@ -8,8 +8,10 @@
     <div class="card-body">
       <h1 class="card-title">Typo-Racer</h1>
       <p class="card-text">Masukkan nama Anda</p>
-      <input type="text" class="form"><br><br>
-      <router-link :to="{path: '/room'}" href="#" class="btn btn-dark">Masuk</router-link>
+      <input id="form-nama" type="text" class="form"><br><br>
+      <router-link :to="{path: '/room'}">
+        <button @click="setName" class="btn btn-dark">Mulai</button>
+      </router-link>
     </div>
     <div class="card-footer text-muted">
       <marquee direction="left">
@@ -18,6 +20,17 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'InputNama',
+  methods: {
+    setName () {
+      this.$store.commit('setPlayerName', document.querySelector('#form-nama').value)
+    }
+  }
+}
+</script>
 
 <style>
 .card {
