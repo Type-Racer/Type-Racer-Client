@@ -22,7 +22,7 @@ export default new Vuex.Store({
   },
   mutations: {
     getQuestion: function (state, payload) {
-      state.array = payload.question.map(val => val)
+      state.array = payload.map(val => val)
     },
     setPlayerName (state, name) {
       state.playerName = name
@@ -32,10 +32,16 @@ export default new Vuex.Store({
     },
     getRoom (state, rooms) {
       state.rooms = rooms
+    },
+    getLocalQuestion (state, question) {
+      state.array = question.map(val => val)
     }
   },
   actions: {
-    createRoom: function ({ state, commit }, roomName) {
+    createRoom: function ({
+      state,
+      commit
+    }, roomName) {
       console.log('cr room')
       let obj = {}
       obj[state.playerName] = {
@@ -44,21 +50,29 @@ export default new Vuex.Store({
       typeRacer.child('Room/' + roomName).set({
         player: obj,
         status: false,
-        counter: 0
+        counter: 0,
+        winner: ''
       })
       commit('setRoom', roomName)
     },
-    joinRoom ({ state, commit }, roomName) {
+    joinRoom ({
+      state,
+      commit
+    }, roomName) {
       console.log(roomName)
       let obj = {}
       obj[state.playerName] = {
         score: 0
       }
       typeRacer.child('Room/' + roomName + '/player').update(obj)
-      typeRacer.child('Room/' + roomName).update({ status: true })
+      typeRacer.child('Room/' + roomName).update({
+        status: true
+      })
       commit('setRoom', roomName)
     },
-    getRoom: function ({ commit }) {
+    getRoom: function ({
+      commit
+    }) {
       typeRacer.child('Room').on('value', snapshot => {
         let childs = []
         snapshot.forEach(el => {
@@ -66,35 +80,52 @@ export default new Vuex.Store({
         })
         commit('getRoom', childs)
       })
+    },
+    getQuestion: function (context) {
+      let counter = 0
+      let questions = []
+      let questionObject = {}
+      let totalBankSoal = 0
+      let wordChoosen = ''
+
+      typeRacer.child('BankSoal').once('value')
+        .then(snapshot => {
+          totalBankSoal = snapshot.numChildren()
+          console.log(`Total Bank Soal ${totalBankSoal}`)
+          while (counter < 10) {
+            let indexRandom = Math.floor(Math.random() * totalBankSoal)
+            wordChoosen = snapshot.child(indexRandom).val()
+            while (questions.indexOf(wordChoosen) !== -1) {
+              indexRandom = Math.floor(Math.random() * totalBankSoal)
+              wordChoosen = snapshot.child(indexRandom).val()
+            }
+            questions.push(wordChoosen)
+            questionObject[counter] = wordChoosen
+            counter++
+          }
+          console.log('ini questions')
+          console.log(questions)
+          console.log(questionObject)
+          typeRacer.child(`Room/${context.state.roomName}/Soal`).set(questionObject)
+
+          context.commit('getQuestion', questions)
+        })
+    },
+    getLocalQuestion: function (context, name) {
+      typeRacer.child(`Room/${name}/Soal`).once('value')
+        .then(snapshot => {
+          let question = []
+          snapshot.forEach(el => {
+            question.push(el.val())
+          })
+          context.commit('getLocalQuestion', question)
+        })
+    },
+    updateScore: function (context, score) {
+      // typeRacer.child(`Room/${name}/player/${this.$store.state.playerName}/score`).set(score)
+    },
+    setWinner: function (context) {
+      typeRacer.child(`Room/${this.$store.state.roomName}/winner`).set(true)
     }
-  // getQuestion: function (context) {
-    // let counter = 0
-    // let questions = []
-    // let totalBankSoal = 0
-    // let wordChoosen = ''
-
-    // console.log('masuk actions')
-
-    // typeRacer.child('BankSoal').once('value')
-    //   .then(snapshot => {
-    //     totalBankSoal = snapshot.numChildren()
-    //     console.log(`Total Bank Soal ${totalBankSoal}`)
-    // while (counter < 10) {
-    //   let indexRandom = Math.floor(Math.random() * totalBankSoal)
-    //   wordChoosen = snapshot.child(indexRandom).val()
-    //   while (questions.indexOf(wordChoosen) !== -1) {
-    //     indexRandom = Math.floor(Math.random() * totalBankSoal)
-    //     wordChoosen = snapshot.child(indexRandom).val()
-    //   }
-    //   questions.push(wordChoosen)
-    //   counter++
-    // }
-    //   console.log('ini questions')
-    //   console.log(questions)
-    //   context.commit('getQuestion', {
-    //     question: questions
-    //   })
-    // })
-  // }
   }
 })

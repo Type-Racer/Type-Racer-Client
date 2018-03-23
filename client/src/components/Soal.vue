@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="jumbotron" v-show=!isWinner >
-      <h2>{{count}}</h2>
+      <h2>{{count+1}}</h2>
       <hr class="my-4">
       <h3 class="display-4">{{jawaban(count)}}</h3>
       <input id="inputketik" type = 'text' v-model='ketikan' v-on:keyup='keymonitor' v-focus>
@@ -22,7 +22,7 @@ import Form from '@/components/Form'
 export default {
   data () {
     return {
-      count: 1,
+      count: 0,
       ketikan: '',
       isWinner: false
     }
@@ -42,6 +42,7 @@ export default {
       }
     },
     menang () {
+      this.$store.dispatch('setWinner')
       this.isWinner = true
     }
   },
@@ -50,7 +51,7 @@ export default {
   },
   watch: {
     count () {
-      if (this.count > 10) {
+      if (this.count > 9) {
         this.menang()
       }
     }
