@@ -10,7 +10,8 @@ export default new Vuex.Store({
     roomName: '',
     winner: 'MENANG',
     array: [],
-    rooms: []
+    rooms: [],
+    score: 0
   },
   getters: {
     jawaban: (state) => (id) => {
@@ -35,6 +36,12 @@ export default new Vuex.Store({
     },
     getLocalQuestion (state, question) {
       state.array = question.map(val => val)
+    },
+    setScore (state, score) {
+      state.score = score
+    },
+    updateScore (state) {
+      state.score++
     }
   },
   actions: {
@@ -81,6 +88,17 @@ export default new Vuex.Store({
         commit('getRoom', childs)
       })
     },
+    getScore: function ({ state, commit }) {
+      typeRacer.child('Room/' + state.roomName + '/player/' + state.playerName).on('value', snapshot => {
+        console.log(snapshot.val())
+        commit('setScore', snapshot.val().score)
+        // let childs = []
+        // snapshot.forEach(el => {
+        //   childs.push(el.key)
+        // })
+        // commit('getRoom', childs)
+      })
+    },
     getQuestion: function (context) {
       let counter = 0
       let questions = []
@@ -121,8 +139,9 @@ export default new Vuex.Store({
           context.commit('getLocalQuestion', question)
         })
     },
-    updateScore: function (context, score) {
-      // typeRacer.child(`Room/${name}/player/${this.$store.state.playerName}/score`).set(score)
+    updateScore: function ({ state, commit }) {
+      commit('updateScore')
+      typeRacer.child(`Room/${state.roomName}/player/${state.playerName}/score`).set(state.score)
     },
     setWinner: function (context) {
       typeRacer.child(`Room/${this.$store.state.roomName}/winner`).set(true)
