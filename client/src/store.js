@@ -66,35 +66,38 @@ export default new Vuex.Store({
         })
         commit('getRoom', childs)
       })
+    },
+    removeRoom: function ({ state, commit }) {
+      typeRacer.child('Room/' + state.roomName).remove(() => console.log('succes remove node'))
+    },
+    getQuestion: function (context) {
+      let counter = 0
+      let questions = []
+      let totalBankSoal = 0
+      let wordChoosen = ''
+
+      console.log('masuk actions')
+
+      typeRacer.child('BankSoal').once('value')
+        .then(snapshot => {
+          totalBankSoal = snapshot.numChildren()
+          console.log(`Total Bank Soal ${totalBankSoal}`)
+          while (counter < 10) {
+            let indexRandom = Math.floor(Math.random() * totalBankSoal)
+            wordChoosen = snapshot.child(indexRandom).val()
+            while (questions.indexOf(wordChoosen) !== -1) {
+              indexRandom = Math.floor(Math.random() * totalBankSoal)
+              wordChoosen = snapshot.child(indexRandom).val()
+            }
+            questions.push(wordChoosen)
+            counter++
+          }
+          console.log('ini questions')
+          console.log(questions)
+          context.commit('getQuestion', {
+            question: questions
+          })
+        })
     }
-  // getQuestion: function (context) {
-    // let counter = 0
-    // let questions = []
-    // let totalBankSoal = 0
-    // let wordChoosen = ''
-
-    // console.log('masuk actions')
-
-    // typeRacer.child('BankSoal').once('value')
-    //   .then(snapshot => {
-    //     totalBankSoal = snapshot.numChildren()
-    //     console.log(`Total Bank Soal ${totalBankSoal}`)
-    // while (counter < 10) {
-    //   let indexRandom = Math.floor(Math.random() * totalBankSoal)
-    //   wordChoosen = snapshot.child(indexRandom).val()
-    //   while (questions.indexOf(wordChoosen) !== -1) {
-    //     indexRandom = Math.floor(Math.random() * totalBankSoal)
-    //     wordChoosen = snapshot.child(indexRandom).val()
-    //   }
-    //   questions.push(wordChoosen)
-    //   counter++
-    // }
-    //   console.log('ini questions')
-    //   console.log(questions)
-    //   context.commit('getQuestion', {
-    //     question: questions
-    //   })
-    // })
-  // }
   }
 })

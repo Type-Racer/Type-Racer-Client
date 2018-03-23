@@ -6,6 +6,7 @@
       <h3 class="display-4">{{jawaban(count)}}</h3>
       <input id="inputketik" type = 'text' v-model='ketikan' v-on:keyup='keymonitor' v-focus>
       <button @click=answer ref= 'myBtn'>jawab</button>
+      <button @click="destroyRoom">drop room</button>
     </div>
     <div class = 'jumbotron' v-show=isWinner>
       <h1>KAMU {{winner}}</h1>
@@ -28,6 +29,9 @@ export default {
     }
   },
   methods: {
+    destroyRoom () {
+      this.$store.dispatch('removeRoom')
+    },
     answer ($event) {
       if (this.ketikan === this.jawaban(this.count)) {
         this.count++
