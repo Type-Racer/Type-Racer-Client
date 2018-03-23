@@ -1,19 +1,19 @@
 <template>
   <div class="card text-center">
     <div class="card-header">
-      <marquee direction="left">
-        <img src="https://image.flaticon.com/icons/png/512/618/618965.png" alt="">
+      <marquee direction="right">
+        <img src="https://image.flaticon.com/icons/svg/296/296216.svg" alt="">
       </marquee>
     </div>
     <div class="card-body">
       <h1 class="card-title">Typo-Racer</h1>
-      <p class="card-text">Masukkan nama room, lalu ketik mulai</p>
+      <p class="card-text">Masukkan nama Anda</p>
       <input type="text" class="form"><br><br>
-      <router-link :to="{path: '/start/'+id}" href="#" class="btn btn-dark">Mulai</router-link>
+      <router-link :to="{path: '/room'}" href="#" class="btn btn-dark">Masuk</router-link>
     </div>
     <div class="card-footer text-muted">
-      <marquee direction="right">
-        <img src="https://image.flaticon.com/icons/svg/296/296216.svg" alt="">
+      <marquee direction="left">
+        <img src="https://image.flaticon.com/icons/png/512/618/618965.png" alt="">
       </marquee>
     </div>
   </div>
