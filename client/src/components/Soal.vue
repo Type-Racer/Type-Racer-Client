@@ -6,6 +6,7 @@
       <h3 class="display-4">{{jawaban(count)}}</h3>
       <input id="inputketik" type = 'text' v-model='ketikan' v-on:keyup='keymonitor' v-focus>
       <button @click=answer ref= 'myBtn'>jawab</button>
+      {{score}}
     </div>
     <div class = 'jumbotron' v-show="isWinner == 'win'">
       <h1>KAMU MENANG!</h1>
@@ -38,6 +39,7 @@ export default {
     answer ($event) {
       if (this.ketikan === this.jawaban(this.count)) {
         this.count++
+        this.$store.dispatch('updateScore')
         this.ketikan = ''
       } else {
         this.ketikan = ''
@@ -67,7 +69,10 @@ export default {
     ...mapGetters([
       'jawaban',
       'winner'
-    ])
+    ]),
+    score () {
+      return this.$store.state.score
+    }
   },
   directives: {
     focus: {
@@ -79,6 +84,7 @@ export default {
   },
   created: function () {
     // console.log('ini '+typeRacer.child(`Room/${this.$store.state.roomName}/winner`).val())
+    this.$store.dispatch('getScore')
     typeRacer.child(`Room/${this.$store.state.roomName}/winner`).on('value', (snapshot) => {
       console.log(`ini snapshot ${snapshot.val()}`)
       console.log(snapshot.val())
